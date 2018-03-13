@@ -1,0 +1,133 @@
+Testing Code:
+
+> rpart.tree <- rpart(STATUS ~ GroomAge+BrideAge+GroomPersonality+BridePersonality+Joint Income, data = Marriage_training) 
+> predict.tree <- predict(rpart.tree, newdata = Marriage_training, type = "class") 
+> eroor <- Marriage_training$STATUS 
+> error.tree <- mean(predict.tree != eroor) 
+> error.tree 
+[1] 0.296 
+> rpart.tree <- rpart(STATUS ~ GroomAge+BrideAge+GroomPersonality+BridePersonality, data = Marriage_training) 
+> predict.tree <- predict(rpart.tree, newdata = Marriage_training, type = "class") 
+> eroor <- Marriage_training$STATUS 
+> error.tree <- mean(predict.tree != eroor) 
+> error.tree 
+[1] 0.2146667
+> rpart.tree <- rpart(STATUS ~ GroomAge+BrideAge+GroomPersonality, data = Marriage_training) 
+> predict.tree <- predict(rpart.tree, newdata = Marriage_training, type = "class") 
+> eroor <- Marriage_training$STATUS 
+> error.tree <- mean(predict.tree != eroor) 
+> error.tree 
+[1] 0.4866667 
+> rpart.tree <- rpart(STATUS ~ GroomAge+BrideAge, data = Marriage_training) 
+> predict.tree <- predict(rpart.tree, newdata = Marriage_training, type = "class") 
+> eroor <- Marriage_training$STATUS 
+> error.tree <- mean(predict.tree != eroor) 
+> error.tree 
+[1] 0.4866667 
+> rpart.tree <- rpart(STATUS ~ GroomPersonality+BridePersonality, data = Marriage_training) 
+> predict.tree <- predict(rpart.tree, newdata = Marriage_training, type = "class") 
+> eroor <- Marriage_training$STATUS 
+> error.tree <- mean(predict.tree != eroor) 
+> error.tree 
+[1] 0.18
+
+Testing with new Column:
+
+> Marriage_training[,7] <- "" 
+> colnames(Marriage_training)[7] <- "AgeDifference"
+> Marriage_training[,7] = abs(Marriage_training$GroomAge - Marriage_training$BrideAge)
+> rpart.tree <- rpart(STATUS ~ GroomPersonality + BridePersonality + AgeDifference, data = Marriage_training) 
+(I later replaced this column with a simple abs(GroomAge - BrideAge) for excel matching file purposes)
+> predict.tree <- predict(rpart.tree,newdata = Marriage_training, type = "class")  
+> eroor <- Marriage_training$STATUS 
+> error.tree <- mean(predict.tree != eroor)  
+> error.tree 
+[1] 0.04933333
+
+
+
+R tree:
+
+n= 750 
+node), split, n, loss, yval, (yprob)
+      * denotes terminal node
+   1) root 750 365 Separated (0.1800000 0.3066667 0.5133333)  
+     2) abs(GroomAge - BrideAge)>=9.5 258 123 Divorced (0.5232558 0.0000000 0.4767442)  
+       4) abs(GroomAge - BrideAge)>=38.5 13   3 Divorced (0.7692308 0.0000000 0.2307692) *
+       5) abs(GroomAge - BrideAge)< 38.5 245 120 Divorced (0.5102041 0.0000000 0.4897959)  
+        10) abs(GroomAge - BrideAge)< 36.5 238 115 Divorced (0.5168067 0.0000000 0.4831933)  
+          20) abs(GroomAge - BrideAge)>=34.5 12   4 Divorced (0.6666667 0.0000000 0.3333333) *
+          21) abs(GroomAge - BrideAge)< 34.5 226 111 Divorced (0.5088496 0.0000000 0.4911504)  
+            42) abs(GroomAge - BrideAge)< 25.5 170  79 Divorced (0.5352941 0.0000000 0.4647059)  
+              84) abs(GroomAge - BrideAge)>=10.5 105  45 Divorced (0.5714286 0.0000000 0.4285714)  
+               168) abs(GroomAge - BrideAge)< 12.5 15   4 Divorced (0.7333333 0.0000000 0.2666667) *
+               169) abs(GroomAge - BrideAge)>=12.5 90  41 Divorced (0.5444444 0.0000000 0.4555556)  
+                 338) abs(GroomAge - BrideAge)>=21.5 17   6 Divorced (0.6470588 0.0000000 0.3529412) *
+                 339) abs(GroomAge - BrideAge)< 21.5 73  35 Divorced (0.5205479 0.0000000 0.4794521)  
+                   678) abs(GroomAge - BrideAge)< 17.5 43  18 Divorced (0.5813953 0.0000000 0.4186047)  
+                    1356) GroomPersonality=B 20   7 Divorced (0.6500000 0.0000000 0.3500000)  
+                      2712) BridePersonality=A 13   0 Divorced (1.0000000 0.0000000 0.0000000) *
+                      2713) BridePersonality=B 7   0 Separated (0.0000000 0.0000000 1.0000000) *
+                    1357) GroomPersonality=A 23  11 Divorced (0.5217391 0.0000000 0.4782609)  
+                      2714) BridePersonality=B 12   0 Divorced (1.0000000 0.0000000 0.0000000) *
+                      2715) BridePersonality=A 11   0 Separated (0.0000000 0.0000000 1.0000000) *
+                   679) abs(GroomAge - BrideAge)>=17.5 30  13 Separated (0.4333333 0.0000000 0.5666667) *
+              85) abs(GroomAge - BrideAge)< 10.5 65  31 Separated (0.4769231 0.0000000 0.5230769)  
+               170) GroomPersonality=A 32  14 Divorced (0.5625000 0.0000000 0.4375000)  
+                 340) BridePersonality=B 18   0 Divorced (1.0000000 0.0000000 0.0000000) *
+                 341) BridePersonality=A 14   0 Separated (0.0000000 0.0000000 1.0000000) *
+               171) GroomPersonality=B 33  13 Separated (0.3939394 0.0000000 0.6060606)  
+                 342) BridePersonality=A 13   0 Divorced (1.0000000 0.0000000 0.0000000) *
+                 343) BridePersonality=B 20   0 Separated (0.0000000 0.0000000 1.0000000) *
+            43) abs(GroomAge - BrideAge)>=25.5 56  24 Separated (0.4285714 0.0000000 0.5714286)  
+              86) GroomPersonality=A 23  11 Divorced (0.5217391 0.0000000 0.4782609)  
+               172) BridePersonality=B 12   0 Divorced (1.0000000 0.0000000 0.0000000) *
+               173) BridePersonality=A 11   0 Separated (0.0000000 0.0000000 1.0000000) *
+              87) GroomPersonality=B 33  12 Separated (0.3636364 0.0000000 0.6363636)  
+               174) BridePersonality=A 12   0 Divorced (1.0000000 0.0000000 0.0000000) *
+               175) BridePersonality=B 21   0 Separated (0.0000000 0.0000000 1.0000000) *
+        11) abs(GroomAge - BrideAge)>=36.5 7   2 Separated (0.2857143 0.0000000 0.7142857) *
+     3) abs(GroomAge - BrideAge)< 9.5 492 230 Separated (0.0000000 0.4674797 0.5325203)  
+       6) abs(GroomAge - BrideAge)>=8.5 17   5 Married (0.0000000 0.7058824 0.2941176) *
+       7) abs(GroomAge - BrideAge)< 8.5 475 218 Separated (0.0000000 0.4589474 0.5410526)  
+        14) abs(GroomAge - BrideAge)< 6.5 384 184 Separated (0.0000000 0.4791667 0.5208333)  
+          28) abs(GroomAge - BrideAge)>=0.5 214 102 Married (0.0000000 0.5233645 0.4766355)  
+            56) GroomPersonality=B 109  45 Married (0.0000000 0.5871560 0.4128440)  
+             112) BridePersonality=A 64   0 Married (0.0000000 1.0000000 0.0000000) *
+             113) BridePersonality=B 45   0 Separated (0.0000000 0.0000000 1.0000000) *
+            57) GroomPersonality=A 105  48 Separated (0.0000000 0.4571429 0.5428571)  
+             114) BridePersonality=B 48   0 Married (0.0000000 1.0000000 0.0000000) *
+             115) BridePersonality=A 57   0 Separated (0.0000000 0.0000000 1.0000000) *
+          29) abs(GroomAge - BrideAge)< 0.5 170  72 Separated (0.0000000 0.4235294 0.5764706)  
+            58) BridePersonality=A 85  38 Separated (0.0000000 0.4470588 0.5529412)  
+             116) GroomPersonality=B 38   0 Married (0.0000000 1.0000000 0.0000000) *
+             117) GroomPersonality=A 47   0 Separated (0.0000000 0.0000000 1.0000000) *
+            59) BridePersonality=B 85  34 Separated (0.0000000 0.4000000 0.6000000)  
+             118) GroomPersonality=A 34   0 Married (0.0000000 1.0000000 0.0000000) *
+             119) GroomPersonality=B 51   0 Separated (0.0000000 0.0000000 1.0000000) *
+        15) abs(GroomAge - BrideAge)>=6.5 91  34 Separated (0.0000000 0.3736264 0.6263736)  
+          30) BridePersonality=A 47  19 Separated (0.0000000 0.4042553 0.5957447)  
+            60) GroomPersonality=B 19   0 Married (0.0000000 1.0000000 0.0000000) *
+            61) GroomPersonality=A 28   0 Separated (0.0000000 0.0000000 1.0000000) *
+          31) BridePersonality=B 44  15 Separated (0.0000000 0.3409091 0.6590909)  
+            62) GroomPersonality=A 15   0 Married (0.0000000 1.0000000 0.0000000) *
+            63) GroomPersonality=B 29   0 Separated (0.0000000 0.0000000 1.0000000) *
+
+CrossValidation Code:
+
+> rpart.tree <- rpart(STATUS ~ GroomPersonality + BridePersonality + abs(GroomAge - BrideAge), control = rpart.control(minisplit = 2), data = Marriage_training) 
+> CrossValidation::cross_validate(Marriage_training, rpart.tree, 2, .8) 
+accuracy_subset accuracy_all 
+1 0.8800000 0.5933333 
+2 0.6533333 0.7066667
+
+Submit Code:
+
+> library("rpart")
+> rpart.tree <- rpart(STATUS ~ GroomPersonality + BridePersonality + abs(GroomAge - BrideAge), control = rpart.control(minisplit = 2), data = Marriage_training) 
+> predict.tree <- predict(rpart.tree,newdata = Marriage_training, type = "class") 
+> predict.tree <- predict(rpart.tree,newdata = Marriage_testing_students, type = "class") 
+> submission <- Marriage_testing_students
+> submission$STATUS = ""
+> submission$STATUS <- predict.tree
+> write.csv(submission, 'submission.csv', row.names= FALSE)

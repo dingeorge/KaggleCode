@@ -1,0 +1,10 @@
+> myprediction<-test
+> decision <- rep('F',nrow(myprediction))
+> decision <- test$SCORE + test$PARTICIPATION
+> decision[myprediction$SCORE>=0] <- ‘F’
+> decision[myprediction$SCORE>=80 | (myprediction$SCORE >= 70 & myprediction$PARTICIPATION >= .7)]<-'A'
+> decision[(myprediction$SCORE>=70 & myprediction$SCORE<80) | ((myprediction$SCORE >= 60 & myprediction$SCORE<70) & myprediction$PARTICIPATION >= .6)]<-'B'
+> decision[(myprediction$SCORE>=50 & myprediction$SCORE<70) | ((myprediction$SCORE >= 40 & myprediction$SCORE<50) & myprediction$PARTICIPATION >= .6)]<-'C'
+> decision[(myprediction$SCORE>=40 & myprediction$SCORE<50) | ((myprediction$SCORE >= 20 & myprediction$SCORE<40) & myprediction$PARTICIPATION >= .7)]<-'D'
+
+

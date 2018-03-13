@@ -1,0 +1,59 @@
+(Actual predictor code)
+> install.packages("rpart")
+> install.packages("rpart.plot")
+> library(rpart)
+> library(rpart.plot)
+> tree <- rpart(GRADE ~ SCORE+ASKS_QUESTIONS+LEAVES_EARLY+PARTICIPATION, data = M2017_train)
+> decision <- predict(tree, newdata = M2017_train,type = 'class')
+> test <- M2017_train$GRADE
+> error <- mean(decision != test)
+> error
+[1] 0.05721097
+
+(Testing for dud attributes code)
+> tree <- rpart(GRADE ~ SCORE+ASKS_QUESTIONS+PARTICIPATION, data = M2017_train)
+> decision <- predict(tree, newdata = M2017_train,type = 'class')
+> error <- mean(decision != test)
+> error
+[1] 0.05721097
+> tree <- rpart(GRADE ~ SCORE+PARTICIPATION, data = M2017_train)
+> decision <- predict(tree, newdata = M2017_train,type = 'class')
+> error <- mean(decision != test)
+> error
+[1] 0.05721097
+> tree <- rpart(GRADE ~ SCORE, data = M2017_train)
+> decision <- predict(tree, newdata = M2017_train,type = 'class')
+> error <- mean(decision != test)
+> error
+[1] 0.1847437
+n= 839 
+
+(The tree)
+node), split, n, loss, yval, (yprob)
+      * denotes terminal node
+
+ 1) root 839 636 A (0.24 0.14 0.19 0.22 0.2)  
+   2) SCORE>=72.83 220  23 A (0.9 0.1 0 0 0)  
+     4) SCORE>=79.135 175   4 A (0.98 0.023 0 0 0) *
+     5) SCORE< 79.135 45  19 A (0.58 0.42 0 0 0)  
+      10) PARTICIPATION>=0.495 22   1 A (0.95 0.045 0 0 0) *
+      11) PARTICIPATION< 0.495 23   5 B (0.22 0.78 0 0 0) *
+   3) SCORE< 72.83 619 432 D (0.0097 0.16 0.26 0.3 0.27)  
+     6) SCORE>=28.985 442 273 D (0.014 0.22 0.36 0.38 0.025)  
+      12) SCORE>=50.895 223 106 C (0.027 0.43 0.52 0.018 0)  
+        24) SCORE>=58.59 148  54 B (0.041 0.64 0.32 0 0)  
+          48) PARTICIPATION>=0.495 77   7 B (0.078 0.91 0.013 0 0) *
+          49) PARTICIPATION< 0.495 71  24 C (0 0.34 0.66 0 0)  
+            98) SCORE>=66.77 24   4 B (0 0.83 0.17 0 0) *
+            99) SCORE< 66.77 47   4 C (0 0.085 0.91 0 0) *
+        25) SCORE< 58.59 75   6 C (0 0.027 0.92 0.053 0) *
+      13) SCORE< 50.895 219  54 D (0 0 0.2 0.75 0.05)  
+        26) SCORE>=42.375 93  42 D (0 0 0.45 0.55 0)  
+          52) PARTICIPATION>=0.535 43   2 C (0 0 0.95 0.047 0) *
+          53) PARTICIPATION< 0.535 50   1 D (0 0 0.02 0.98 0) *
+        27) SCORE< 42.375 126  12 D (0 0 0.0079 0.9 0.087) *
+     7) SCORE< 28.985 177  18 F (0 0 0 0.1 0.9)  
+      14) SCORE>=23.08 41  16 F (0 0 0 0.39 0.61)  
+        28) PARTICIPATION>=0.63 16   0 D (0 0 0 1 0) *
+        29) PARTICIPATION< 0.63 25   0 F (0 0 0 0 1) *
+      15) SCORE< 23.08 136   2 F (0 0 0 0.015 0.99) *
